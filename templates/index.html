@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parkinson's Disease Prediction</title>
+  <link rel="icon" href="../static/favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      background-color: black;
+      color: #f2ebe9;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: transparent;
+      border-radius: 20px;
+      margin: 20px;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="number"] {
+      padding: 0.5rem;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    button[type="submit"] {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    #prediction-result {
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+</head>
+<body>
+  <form id="parkinson-form" action="/predict" method="post" enctype="multipart/form-data">
+    <h1>Parkinson's Disease Prediction</h1>
+    <h3>Upload Parkinson's Data</h3>
+    <input type="file" name="file" accept=".csv"><br><br>
+    <button type="submit">Predict</button>
+  </form>
+  <div id="prediction-result"></div>
+</body>
+</html>

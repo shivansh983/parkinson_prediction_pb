@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parkinson's Disease Prediction Result</title>
+  <link rel="icon" href="../static/favicon.ico" type="image/x-icon">
+  <style>
+    body {
+      background-color: black;
+      color: #f2ebe9;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .result-container {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .prediction {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="result-container">
+    <h3>Parkinson's Disease Prediction Result</h3>
+    <div class="prediction">
+      <table>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Prediction</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for data in result_data %}
+            <tr>
+              <td>{{ data.username }}</td>
+              <td>{{ data.prediction }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

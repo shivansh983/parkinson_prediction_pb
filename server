@@ -1,0 +1,73 @@
+import os
+import joblib
+import pandas as pd
+from flask import Flask, render_template, request
+from werkzeug.utils import secure_filename 
+from sklearn.preprocessing import StandardScaler
+
+app = Flask(__name__)
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Load the trained model
+model = joblib.load('parkinsons_model.pkl')
+
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return "No file part"
+        
+        file = request.files['file']
+        if file.filename == '':
+            return "No selected file"
+        
+        if file:
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename))
+            file.save(filename)
+            
+            return render_template('result.html', filename=file.filename)
+    
+    return render_template('index.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    # Check if the file is present in the request
+    if 'file' not in request.files:
+        return "No file part"
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return "No selected file"
+
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename))
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+
+    file.save(file_path)
+
+    # Read the uploaded file into a DataFrame
+    df = pd.read_csv(file_path)
+
+    # Drop extra columns to match the expected  features
+    df = df.drop(['name', 'status'], axis=1)  # Adjust columns based on your dataset
+
+    # Data Standardization
+    scaler = StandardScaler()
+    X = scaler.fit_transform(df)  # Standardize the adjusted dataset
+
+    # Make predictions
+    predictions = model.predict(X)
+
+    #  usernames in the first column of the original dataset
+    usernames = df.iloc[:, 0].tolist()
+
+    # Prepare result data for display
+    result_data = [{'username': username, 'prediction': 'Positive' if pred == 1 else 'Negative'}
+                   for username, pred in zip(usernames, predictions)]
+
+    return render_template('result.html', result_data=result_data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
